@@ -9,4 +9,19 @@ services:
     volumes:
       - ../:/app
     working_dir: /app
-  
+    links:
+      - postgres
+
+  postgres:
+    image: postgres:12-alpine
+    restart: on-failure
+    ports:
+      - '${POSTGRES_PORT}:5432'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_MULTIPLE_DATABASES
+volumes:
+  postgres:
