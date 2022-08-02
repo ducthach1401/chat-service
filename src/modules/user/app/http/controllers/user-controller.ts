@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Put, Req, Res } from '@nestjs/common';
+import { UserModel } from 'src/modules/user/domain/models/user-model';
 import { GetUserUsecase } from 'src/modules/user/domain/usecases/get-user-usecase';
 import { RegisterUserUsecase } from 'src/modules/user/domain/usecases/register-user-usecase';
 import { UpdateUserUsecase } from 'src/modules/user/domain/usecases/update-user-usecase';
@@ -19,7 +20,7 @@ export class UserController {
   }
 
   @Get()
-  async getInfo(@Req() req: any): Promise<any> {
+  async getInfo(@Req() req: any): Promise<UserModel> {
     const result = await this.getUserUsecase.call(req.user.id);
     return result;
   }

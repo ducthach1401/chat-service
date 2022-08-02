@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user-entity';
 import * as brcypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
+import { UserModel } from '../../domain/models/user-model';
 
 @Injectable()
 export class UserDatasource {
@@ -13,13 +14,13 @@ export class UserDatasource {
     private readonly configService: ConfigService,
   ) {}
 
-  async get(id: string): Promise<any> {
+  async get(id: string): Promise<UserModel> {
     const user = await this.userEntityRepository.findOne({
       where: {
         id: id,
       },
     });
-    return user;
+    return user.fromModel();
   }
 
   async update(id: string, data: any): Promise<boolean> {

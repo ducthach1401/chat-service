@@ -1,3 +1,4 @@
+import { UserModel } from 'src/modules/user/domain/models/user-model';
 import {
   Column,
   CreateDateColumn,
@@ -32,5 +33,15 @@ export class UserEntity {
     entity.username = username;
     entity.password = password;
     return entity;
+  }
+
+  fromModel(): UserModel {
+    return new UserModel(
+      this.id,
+      this.name,
+      this.username,
+      this.created_at,
+      this.updated_at,
+    );
   }
 }

@@ -1,11 +1,21 @@
 export class UserModel {
+  public id: string;
   public name: string;
   public username: string;
-  public password: string;
+  public created_at: Date;
+  public updated_at: Date;
 
-  constructor(data: any) {
-    this.name = data.name;
-    this.username = data.username;
-    this.password = data.password;
+  constructor(
+    id: string,
+    name: string,
+    username: string,
+    createdAt: Date,
+    updatedAt: Date,
+  ) {
+    this.id = id;
+    this.name = name;
+    this.username = username;
+    this.created_at = createdAt;
+    this.updated_at = updatedAt;
   }
 }

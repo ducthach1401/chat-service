@@ -1,5 +1,7 @@
+import { UserModel } from '../models/user-model';
+
 export abstract class UserRepository {
-  abstract get(id: string): Promise<any>;
+  abstract get(id: string): Promise<UserModel>;
   abstract update(id: string, data: any): Promise<boolean>;
   abstract register(
     name: string,

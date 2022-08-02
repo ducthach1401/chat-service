@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { UserModel } from '../../domain/models/user-model';
 import { UserRepository } from '../../domain/repositories/user-repository';
 import { UserDatasource } from '../database/user-datasource';
 
@@ -8,7 +9,7 @@ export class UserRepositoryImpl extends UserRepository {
     super();
   }
 
-  async get(id: string): Promise<any> {
+  async get(id: string): Promise<UserModel> {
     return await this.userDatasource.get(id);
   }
 
