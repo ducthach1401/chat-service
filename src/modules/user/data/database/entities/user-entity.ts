@@ -14,7 +14,7 @@ export class UserEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column()
@@ -26,11 +26,11 @@ export class UserEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
-  static toModel(model: any): UserEntity {
+  static toData(name: string, username: string, password: string): UserEntity {
     const entity = new UserEntity();
-    entity.name = model.name;
-    entity.username = model.username;
-    entity.password = model.password;
+    entity.name = name;
+    entity.username = username;
+    entity.password = password;
     return entity;
   }
 }
