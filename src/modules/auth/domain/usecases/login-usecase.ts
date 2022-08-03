@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { CheckUserUsecase } from 'src/modules/user/domain/usecases/check-user-usecase';
 import { TokenModel } from '../models/token-model';

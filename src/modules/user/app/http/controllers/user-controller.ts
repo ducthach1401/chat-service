@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Req } from '@nestjs/common';
 import { Public } from 'src/modules/auth/app/decorators/metadata';
 import { UserModel } from 'src/modules/user/domain/models/user-model';
 import { GetUserUsecase } from 'src/modules/user/domain/usecases/get-user-usecase';
@@ -30,11 +30,7 @@ export class UserController {
 
   @Put('update')
   async update(@Req() req: any, @Body() body: UpdateUserDto): Promise<boolean> {
-    await this.updateUserUsecase.call(
-      req.user.id,
-      body.name,
-      body.password,
-    );
+    await this.updateUserUsecase.call(req.user.id, body.name, body.password);
     return true;
   }
 }
