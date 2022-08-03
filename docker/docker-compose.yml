@@ -22,6 +22,5 @@ services:
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
-      - POSTGRES_MULTIPLE_DATABASES
 volumes:
   postgres:
