@@ -5,6 +5,7 @@ import { GetUserUsecase } from 'src/modules/user/domain/usecases/get-user-usecas
 import { RegisterUserUsecase } from 'src/modules/user/domain/usecases/register-user-usecase';
 import { UpdateUserUsecase } from 'src/modules/user/domain/usecases/update-user-usecase';
 import { RegisterUserDto } from '../dtos/register-user-dto';
+import { UpdateUserDto } from '../dtos/update-user-dto';
 
 @Controller('api/v1/user')
 export class UserController {
@@ -28,8 +29,12 @@ export class UserController {
   }
 
   @Put('update')
-  async update(@Req() req: any, @Body() body: any): Promise<boolean> {
-    await this.updateUserUsecase.call(req.user.id, body);
+  async update(@Req() req: any, @Body() body: UpdateUserDto): Promise<boolean> {
+    await this.updateUserUsecase.call(
+      req.user.id,
+      body.name,
+      body.password,
+    );
     return true;
   }
 }

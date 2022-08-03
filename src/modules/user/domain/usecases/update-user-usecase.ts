@@ -5,7 +5,11 @@ import { UserRepository } from '../repositories/user-repository';
 export class UpdateUserUsecase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async call(id: string, data: any): Promise<any> {
-    return await this.userRepository.update(id, data);
+  async call(
+    id: string,
+    name: string | undefined,
+    password: string | undefined,
+  ): Promise<any> {
+    return await this.userRepository.update(id, name, password);
   }
 }

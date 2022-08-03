@@ -21,11 +21,35 @@ export class UserDatasource {
         id: id,
       },
     });
+    if (!user) {
+      throw new HttpException('Not found', 400);
+    }
     return user.fromModel();
   }
 
-  async update(id: string, data: any): Promise<boolean> {
-    await this.userEntityRepository.update({ id: id }, data);
+  async update(
+    id: string,
+    name: string | undefined,
+    password: string | undefined,
+  ): Promise<boolean> {
+    const user = await this.userEntityRepository.findOne({
+      id: id,
+    });
+
+    if (!user) {
+      throw new HttpException('Not found', 400);
+    }
+
+    if (user.name != name && name) {
+      user.name = name;
+    }
+
+    if (user.password != password && password) {
+      const salt = Number(this.configService.get<number>('user.salt'));
+      user.password = brcypt.hashSync(password, salt);
+    }
+
+    await this.userEntityRepository.save(user);
     return true;
   }
 
