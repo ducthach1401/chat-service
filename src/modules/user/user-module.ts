@@ -8,6 +8,7 @@ import { UserEntity } from './data/database/entities/user-entity';
 import { UserDatasource } from './data/database/user-datasource';
 import { UserRepositoryImpl } from './data/repositories/user-repository-impl';
 import { UserRepository } from './domain/repositories/user-repository';
+import { CheckUserUsecase } from './domain/usecases/check-user-usecase';
 import { GetUserUsecase } from './domain/usecases/get-user-usecase';
 import { RegisterUserUsecase } from './domain/usecases/register-user-usecase';
 import { UpdateUserUsecase } from './domain/usecases/update-user-usecase';
@@ -37,6 +38,8 @@ import { UpdateUserUsecase } from './domain/usecases/update-user-usecase';
       provide: UserRepository,
       useClass: UserRepositoryImpl,
     },
+    CheckUserUsecase,
   ],
+  exports: [CheckUserUsecase],
 })
 export class UserModule {}

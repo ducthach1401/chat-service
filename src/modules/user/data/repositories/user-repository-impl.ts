@@ -24,4 +24,8 @@ export class UserRepositoryImpl extends UserRepository {
   async update(id: string, data: any): Promise<boolean> {
     return await this.userDatasource.update(id, data);
   }
+
+  async check(username: string, password: string): Promise<any> {
+    return await this.userDatasource.check(username, password);
+  }
 }

@@ -8,4 +8,5 @@ export abstract class UserRepository {
     username: string,
     password: string,
   ): Promise<boolean>;
+  abstract check(username: string, password: string): Promise<any>;
 }

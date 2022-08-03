@@ -5,6 +5,7 @@ import { UserEntity } from './entities/user-entity';
 import * as brcypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { UserModel } from '../../domain/models/user-model';
+import { RoleType } from 'src/core/enums/role-type';
 
 @Injectable()
 export class UserDatasource {
@@ -44,5 +45,25 @@ export class UserDatasource {
     const userEntity = UserEntity.toData(name, username, password);
     await this.userEntityRepository.save(userEntity);
     return true;
+  }
+
+  async check(username: string, password: string): Promise<any> {
+    const user = await this.userEntityRepository.findOne({
+      username: username,
+    });
+
+    if (!user) {
+      throw new HttpException('Username or password wrong', 400);
+    }
+
+    const check = brcypt.compareSync(password, user.password);
+    if (!check) {
+      throw new HttpException('Username or password wrong', 400);
+    }
+
+    return {
+      id: user.id,
+      role: RoleType.User,
+    };
   }
 }

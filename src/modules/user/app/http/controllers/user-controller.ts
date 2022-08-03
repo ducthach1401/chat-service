@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Put, Req, Res } from '@nestjs/common';
+import { Public } from 'src/modules/auth/app/decorators/metadata';
 import { UserModel } from 'src/modules/user/domain/models/user-model';
 import { GetUserUsecase } from 'src/modules/user/domain/usecases/get-user-usecase';
 import { RegisterUserUsecase } from 'src/modules/user/domain/usecases/register-user-usecase';
@@ -13,6 +14,7 @@ export class UserController {
     private readonly registerUserUsecase: RegisterUserUsecase,
   ) {}
 
+  @Public()
   @Post('register')
   async register(@Body() body: RegisterUserDto): Promise<boolean> {
     await this.registerUserUsecase.call(body);
