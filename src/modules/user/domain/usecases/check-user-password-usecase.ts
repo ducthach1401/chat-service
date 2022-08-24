@@ -3,10 +3,10 @@ import { UserModel } from '../models/user-model';
 import { UserRepository } from '../repositories/user-repository';
 
 @Injectable()
-export class UpdateUserUsecase {
+export class CheckUserPasswordUsecase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async call(user: UserModel, name: string | undefined): Promise<boolean> {
-    return await this.userRepository.update(user, name);
+  async call(user: UserModel, password: string): Promise<boolean> {
+    return await this.userRepository.checkPassword(user, password);
   }
 }

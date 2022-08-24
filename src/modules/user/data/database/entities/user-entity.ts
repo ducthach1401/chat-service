@@ -27,11 +27,14 @@ export class UserEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
-  static toData(name: string, username: string, password: string): UserEntity {
+  static toModel(model: UserModel): UserEntity {
     const entity = new UserEntity();
-    entity.name = name;
-    entity.username = username;
-    entity.password = password;
+    entity.id = model.id;
+    entity.name = model.name;
+    entity.username = model.username;
+    entity.password = model.password;
+    entity.created_at = model.createdAt;
+    entity.updated_at = model.updatedAt;
     return entity;
   }
 
@@ -40,6 +43,7 @@ export class UserEntity {
       this.id,
       this.name,
       this.username,
+      this.password,
       this.created_at,
       this.updated_at,
     );

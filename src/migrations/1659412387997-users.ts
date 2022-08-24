@@ -8,10 +8,8 @@ export class users1659412387997 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'string',
             isPrimary: true,
-            isGenerated: true,
-            generationStrategy: 'uuid',
           },
           {
             name: 'name',
@@ -29,13 +27,10 @@ export class users1659412387997 implements MigrationInterface {
           {
             name: 'created_at',
             type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'updated_at',
             type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-            onUpdate: 'CURRENT_TIMESTAMP',
           },
         ],
       }),

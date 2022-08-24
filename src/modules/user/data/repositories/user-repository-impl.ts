@@ -13,23 +13,23 @@ export class UserRepositoryImpl extends UserRepository {
     return await this.userDatasource.get(id);
   }
 
-  async register(
-    name: string,
-    username: string,
-    password: string,
-  ): Promise<boolean> {
-    return await this.userDatasource.register(name, username, password);
+  async getByUsername(username: string): Promise<UserModel> {
+    return await this.userDatasource.getByUsername(username);
   }
 
-  async update(
-    id: string,
-    name: string | undefined,
-    password: string | undefined,
-  ): Promise<boolean> {
-    return await this.userDatasource.update(id, name, password);
+  async update(user: UserModel, name: string | undefined): Promise<boolean> {
+    return await this.userDatasource.update(user, name);
   }
 
-  async check(username: string, password: string): Promise<any> {
-    return await this.userDatasource.check(username, password);
+  async register(user: UserModel): Promise<boolean> {
+    return await this.userDatasource.register(user);
+  }
+
+  async updatePassword(user: UserModel, password: string): Promise<boolean> {
+    return await this.userDatasource.updatePassword(user, password);
+  }
+
+  async checkPassword(user: UserModel, password: string): Promise<boolean> {
+    return await this.userDatasource.checkPassword(user, password);
   }
 }

@@ -3,14 +3,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import database from 'src/config/database';
 import user from 'src/config/user';
-import { UserController } from './app/http/controllers/user-controller';
+import { UserController as UserControllerByMe } from './app/http/controllers/me/user-controller';
+import { UserController as UserControllerByPublic } from './app/http/controllers/public/user-controller';
 import { UserEntity } from './data/database/entities/user-entity';
 import { UserDatasource } from './data/database/user-datasource';
 import { UserRepositoryImpl } from './data/repositories/user-repository-impl';
 import { UserRepository } from './domain/repositories/user-repository';
-import { CheckUserUsecase } from './domain/usecases/check-user-usecase';
+import { CheckUserPasswordUsecase } from './domain/usecases/check-user-password-usecase';
+import { GetUserByUsernameUsecase } from './domain/usecases/get-user-by-username-usecase';
 import { GetUserUsecase } from './domain/usecases/get-user-usecase';
 import { RegisterUserUsecase } from './domain/usecases/register-user-usecase';
+import { UpdateUserPasswordUsecase } from './domain/usecases/update-user-password-usecase';
 import { UpdateUserUsecase } from './domain/usecases/update-user-usecase';
 
 @Module({
@@ -28,7 +31,7 @@ import { UpdateUserUsecase } from './domain/usecases/update-user-usecase';
     }),
     TypeOrmModule.forFeature([UserEntity]),
   ],
-  controllers: [UserController],
+  controllers: [UserControllerByMe, UserControllerByPublic],
   providers: [
     UserDatasource,
     GetUserUsecase,
@@ -38,8 +41,10 @@ import { UpdateUserUsecase } from './domain/usecases/update-user-usecase';
       provide: UserRepository,
       useClass: UserRepositoryImpl,
     },
-    CheckUserUsecase,
+    CheckUserPasswordUsecase,
+    GetUserByUsernameUsecase,
+    UpdateUserPasswordUsecase,
   ],
-  exports: [CheckUserUsecase],
+  exports: [CheckUserPasswordUsecase, GetUserByUsernameUsecase],
 })
 export class UserModule {}

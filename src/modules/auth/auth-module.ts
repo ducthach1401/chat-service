@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -22,7 +22,7 @@ import { LoginUsecase } from './domain/usecases/login-usecase';
       useFactory: (configService: ConfigService): any =>
         configService.get<JwtModuleOptions>('auth.jwt'),
     }),
-    UserModule,
+    forwardRef(() => UserModule),
   ],
   controllers: [AuthController],
   providers: [JwtStrategy, LoginUsecase],
