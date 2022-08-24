@@ -1,7 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { DataSource } = require('typeorm');
 const config = require('dotenv').config().parsed;
 
-module.exports = {
+module.exports.dataSource = new DataSource({
   type: config.DB_TYPE,
   host: config.DB_HOST,
   port: config.DB_PORT,
@@ -14,4 +14,4 @@ module.exports = {
     migrationsDir: 'src/migrations',
   },
   synchronize: false,
-};
+});

@@ -33,7 +33,7 @@ export class UserDatasource {
     password: string | undefined,
   ): Promise<boolean> {
     const user = await this.userEntityRepository.findOne({
-      id: id,
+      where: { id: id },
     });
 
     if (!user) {
@@ -60,7 +60,7 @@ export class UserDatasource {
   ): Promise<boolean> {
     const salt = Number(this.configService.get<number>('user.salt'));
     const check = await this.userEntityRepository.findOne({
-      username: username,
+      where: { username: username },
     });
     if (check) {
       throw new HttpException('Duplicate username', 400);
@@ -73,7 +73,7 @@ export class UserDatasource {
 
   async check(username: string, password: string): Promise<any> {
     const user = await this.userEntityRepository.findOne({
-      username: username,
+      where: { username: username },
     });
 
     if (!user) {
