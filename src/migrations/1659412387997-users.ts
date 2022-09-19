@@ -8,7 +8,7 @@ export class users1659412387997 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'string',
+            type: 'varchar',
             isPrimary: true,
           },
           {
