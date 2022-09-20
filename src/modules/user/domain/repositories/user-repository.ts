@@ -5,7 +5,11 @@ export abstract class UserRepository {
 
   abstract getByUsername(username: string): Promise<UserModel>;
 
-  abstract update(user: UserModel, name: string | undefined): Promise<boolean>;
+  abstract update(
+    user: UserModel,
+    name: string | undefined,
+    socketId: string | undefined,
+  ): Promise<boolean>;
 
   abstract register(user: UserModel): Promise<boolean>;
 

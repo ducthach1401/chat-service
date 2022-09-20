@@ -45,6 +45,11 @@ import { UpdateUserUsecase } from './domain/usecases/update-user-usecase';
     GetUserByUsernameUsecase,
     UpdateUserPasswordUsecase,
   ],
-  exports: [CheckUserPasswordUsecase, GetUserByUsernameUsecase],
+  exports: [
+    CheckUserPasswordUsecase,
+    GetUserByUsernameUsecase,
+    UpdateUserUsecase,
+    GetUserUsecase,
+  ],
 })
 export class UserModule {}

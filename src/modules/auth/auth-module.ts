@@ -6,7 +6,9 @@ import auth from 'src/config/auth';
 import { UserModule } from '../user/user-module';
 import { AuthController } from './app/http/controllers/auth-controller';
 import { JwtStrategy } from './app/jwt/jwt-strategy';
+import { SocketGuard } from './app/jwt/socket-guard';
 import { LoginUsecase } from './domain/usecases/login-usecase';
+import { GetPayloadByTokenUsecase } from './domain/usecases/get-payload-by-token-usecase';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { LoginUsecase } from './domain/usecases/login-usecase';
     forwardRef(() => UserModule),
   ],
   controllers: [AuthController],
-  providers: [JwtStrategy, LoginUsecase],
+  providers: [JwtStrategy, LoginUsecase, SocketGuard, GetPayloadByTokenUsecase],
+  exports: [SocketGuard, GetPayloadByTokenUsecase],
 })
 export class AuthModule {}

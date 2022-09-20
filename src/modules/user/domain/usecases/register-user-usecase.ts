@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
 import { UserModel } from '../models/user-model';
 import { UserRepository } from '../repositories/user-repository';
@@ -7,10 +6,7 @@ import * as brcypt from 'bcrypt';
 
 @Injectable()
 export class RegisterUserUsecase {
-  constructor(
-    private readonly userRepository: UserRepository,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async call(
     name: string,
@@ -22,6 +18,7 @@ export class RegisterUserUsecase {
       name,
       username,
       brcypt.hashSync(password, 10),
+      undefined,
       new Date(),
       new Date(),
     );

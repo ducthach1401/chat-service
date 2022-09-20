@@ -17,8 +17,12 @@ export class UserRepositoryImpl extends UserRepository {
     return await this.userDatasource.getByUsername(username);
   }
 
-  async update(user: UserModel, name: string | undefined): Promise<boolean> {
-    return await this.userDatasource.update(user, name);
+  async update(
+    user: UserModel,
+    name: string | undefined,
+    socketId: string | undefined,
+  ): Promise<boolean> {
+    return await this.userDatasource.update(user, name, socketId);
   }
 
   async register(user: UserModel): Promise<boolean> {
