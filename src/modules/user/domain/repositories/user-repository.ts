@@ -1,7 +1,7 @@
 import { UserModel } from '../models/user-model';
 
 export abstract class UserRepository {
-  abstract get(id: string): Promise<UserModel>;
+  abstract get(id: string, relations: string[] | undefined): Promise<UserModel>;
 
   abstract getByUsername(username: string): Promise<UserModel>;
 

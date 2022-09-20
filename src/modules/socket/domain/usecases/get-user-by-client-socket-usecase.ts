@@ -22,7 +22,7 @@ export class GetUserByClientSocketUsecase {
       return undefined;
     }
 
-    const user = await this.getUserUsecase.call(payload.user_id);
+    const user = await this.getUserUsecase.call(payload.user_id, undefined);
     if (!user) {
       return undefined;
     }

@@ -13,13 +13,13 @@ export class UserController {
   ) {}
   @Get()
   async getInfo(@Req() req: any) {
-    const result = await this.getUserUsecase.call(req.user.user_id);
+    const result = await this.getUserUsecase.call(req.user.user_id, undefined);
     return result.toJson();
   }
 
   @Put('update')
   async update(@Req() req: any, @Body() body: UpdateUserDto): Promise<boolean> {
-    const user = await this.getUserUsecase.call(req.user.user_id);
+    const user = await this.getUserUsecase.call(req.user.user_id, undefined);
     if (!user) {
       throw new LogicalException(
         ErrorCode.USER_NOT_FOUND,

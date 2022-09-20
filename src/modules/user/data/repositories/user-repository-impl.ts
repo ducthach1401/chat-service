@@ -9,8 +9,8 @@ export class UserRepositoryImpl extends UserRepository {
     super();
   }
 
-  async get(id: string): Promise<UserModel> {
-    return await this.userDatasource.get(id);
+  async get(id: string, relations: string[] | undefined): Promise<UserModel> {
+    return await this.userDatasource.get(id, relations);
   }
 
   async getByUsername(username: string): Promise<UserModel> {

@@ -12,11 +12,12 @@ export class UserDatasource {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async get(id: string): Promise<UserModel> {
+  async get(id: string, relations: string[] | undefined): Promise<UserModel> {
     const user = await this.userRepository.findOne({
       where: {
         id: id,
       },
+      relations: relations,
     });
     if (!user) {
       return null;

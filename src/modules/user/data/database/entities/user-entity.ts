@@ -1,8 +1,10 @@
+import { MessageEntity } from 'src/modules/socket/data/datasource/entities/message-entity';
 import { UserModel } from 'src/modules/user/domain/models/user-model';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -29,6 +31,12 @@ export class UserEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => MessageEntity, (message) => message.send_user)
+  send_messages: MessageEntity[];
+
+  @OneToMany(() => MessageEntity, (message) => message.receive_user)
+  receive_messages: MessageEntity[];
 
   toModel(): UserModel {
     return new UserModel(

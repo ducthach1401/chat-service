@@ -24,5 +24,12 @@ services:
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      - redis:/data
 volumes:
   postgres:
+  redis:
