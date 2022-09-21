@@ -40,11 +40,14 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     const sendUserId = await this.cacheManager.get<string>(client.id);
     const sendUser = await this.getUserUsecase.call(sendUserId, undefined);
+
     const receiveUser = await this.getUserUsecase.call(data.to, undefined);
     if (!receiveUser) {
       return undefined;
     }
+
     this.server.to(receiveUser.socketId).emit('private', data.content);
+    
     await this.saveMessageUsecase.call(sendUser, receiveUser, data.content);
   }
 

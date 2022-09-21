@@ -32,7 +32,12 @@ export class SocketDatasource {
         send_user_id: sendUser.id,
         receive_user_id: receiveUser.id,
       },
+      order: {
+        created_at: 'DESC',
+      },
+      relations: ['send_user', 'receive_user'],
     });
+    console.log(messages);
     return messages.map((message) => message.toModel());
   }
 }

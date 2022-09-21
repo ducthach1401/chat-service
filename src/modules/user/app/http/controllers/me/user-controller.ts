@@ -11,9 +11,13 @@ export class UserController {
     private readonly getUserUsecase: GetUserUsecase,
     private readonly updateUserUsecase: UpdateUserUsecase,
   ) {}
+
   @Get()
   async getInfo(@Req() req: any) {
     const result = await this.getUserUsecase.call(req.user.user_id, undefined);
+    if (!result) {
+      return null;
+    }
     return result.toJson();
   }
 

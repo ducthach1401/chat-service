@@ -1,8 +1,12 @@
+import { UserModel } from 'src/modules/user/domain/models/user-model';
+
 export class MessageModel {
   public readonly id: string;
   public readonly sendUserId: string;
   public readonly receiveUserId: string;
   public readonly data: string;
+  public readonly sendUser: UserModel;
+  public readonly receiveUser: UserModel;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 
