@@ -2,7 +2,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '../auth/auth-module';
 import { UserModule } from '../user/user-module';
-import { SocketController } from './controllers/socket/socket-controller';
+import { SocketGateway } from './controllers/socket/socket-gateway';
 import { MessageEntity } from './data/datasource/entities/message-entity';
 import { SocketDatasource } from './data/datasource/socket-datasource';
 import { SocketRepositoryImpl } from './data/repositories/socket-repository-impl';
@@ -20,7 +20,7 @@ import { SaveMessageUsecase } from './domain/usecases/messages/save-message-usec
     TypeOrmModule.forFeature([MessageEntity]),
   ],
   providers: [
-    SocketController,
+    SocketGateway,
     {
       provide: SocketRepository,
       useClass: SocketRepositoryImpl,
