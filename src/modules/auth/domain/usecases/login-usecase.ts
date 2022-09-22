@@ -6,6 +6,7 @@ import { LogicalException } from 'src/exceptions/logical-exception';
 import { CheckUserPasswordUsecase } from 'src/modules/user/domain/usecases/check-user-password-usecase';
 import { GetUserByUsernameUsecase } from 'src/modules/user/domain/usecases/get-user-by-username-usecase';
 import { TokenModel } from '../models/token-model';
+import { SaveAuthTokenUsecase } from './auth-token/save-auth-token-usecase';
 
 @Injectable()
 export class LoginUsecase {
@@ -13,6 +14,7 @@ export class LoginUsecase {
     private readonly jwtService: JwtService,
     private readonly checkUserPasswordUsecase: CheckUserPasswordUsecase,
     private readonly getUserByUsernameUsecase: GetUserByUsernameUsecase,
+    private readonly saveAuthTokenUsecase: SaveAuthTokenUsecase,
   ) {}
 
   async call(username: string, password: string): Promise<TokenModel> {
@@ -33,11 +35,13 @@ export class LoginUsecase {
         undefined,
       );
     }
+
     const jwt = await this.jwtService.signAsync({
       user_id: user.id,
       role: RoleType.User,
     });
 
+    await this.saveAuthTokenUsecase.call(user, jwt);
     return new TokenModel(jwt, 'JWT');
   }
 }

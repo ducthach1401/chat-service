@@ -25,7 +25,7 @@ export class UserModel {
     this.updatedAt = updatedAt;
   }
 
-  toJson() {
+  toJson(): Record<string, any> {
     return {
       id: this.id,
       name: this.name,

@@ -24,3 +24,10 @@ export class UpdateUserDto {
   @MinLength(1)
   name: string;
 }
+
+export class UpdatePasswordUserDto {
+  @IsString()
+  @MaxLength(30)
+  @MinLength(6)
+  password: string;
+}

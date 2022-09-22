@@ -37,7 +37,6 @@ export class SocketDatasource {
       },
       relations: ['send_user', 'receive_user'],
     });
-    console.log(messages);
     return messages.map((message) => message.toModel());
   }
 }
