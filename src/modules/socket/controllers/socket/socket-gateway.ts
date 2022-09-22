@@ -34,11 +34,12 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: any;
 
   @SubscribeMessage('private')
-  async handleMessage(
+  async privateMessage(
     @MessageBody() data: SendMessageDto,
     @ConnectedSocket() client: any,
   ) {
     const sendUserId = await this.cacheManager.get<string>(client.id);
+
     const sendUser = await this.getUserUsecase.call(sendUserId, undefined);
 
     const receiveUser = await this.getUserUsecase.call(data.to, undefined);

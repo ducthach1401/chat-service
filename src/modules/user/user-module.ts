@@ -6,6 +6,7 @@ import user from 'src/config/user';
 import { AuthModule } from '../auth/auth-module';
 import { UserController as UserControllerByMe } from './app/http/controllers/me/user-controller';
 import { UserController as UserControllerByPublic } from './app/http/controllers/public/user-controller';
+import { UserController as UserControllerByUser } from './app/http/controllers/user/user-controller';
 import { UserEntity } from './data/database/entities/user-entity';
 import { UserDatasource } from './data/database/user-datasource';
 import { UserRepositoryImpl } from './data/repositories/user-repository-impl';
@@ -13,6 +14,7 @@ import { UserRepository } from './domain/repositories/user-repository';
 import { CheckUserPasswordUsecase } from './domain/usecases/check-user-password-usecase';
 import { GetUserByUsernameUsecase } from './domain/usecases/get-user-by-username-usecase';
 import { GetUserUsecase } from './domain/usecases/get-user-usecase';
+import { GetUsersUsecase } from './domain/usecases/get-users-usecase';
 import { RegisterUserUsecase } from './domain/usecases/register-user-usecase';
 import { UpdateUserPasswordUsecase } from './domain/usecases/update-user-password-usecase';
 import { UpdateUserUsecase } from './domain/usecases/update-user-usecase';
@@ -33,7 +35,11 @@ import { UpdateUserUsecase } from './domain/usecases/update-user-usecase';
     TypeOrmModule.forFeature([UserEntity]),
     forwardRef(() => AuthModule),
   ],
-  controllers: [UserControllerByMe, UserControllerByPublic],
+  controllers: [
+    UserControllerByMe,
+    UserControllerByPublic,
+    UserControllerByUser,
+  ],
   providers: [
     UserDatasource,
     GetUserUsecase,
@@ -46,6 +52,7 @@ import { UpdateUserUsecase } from './domain/usecases/update-user-usecase';
     CheckUserPasswordUsecase,
     GetUserByUsernameUsecase,
     UpdateUserPasswordUsecase,
+    GetUsersUsecase,
   ],
   exports: [
     CheckUserPasswordUsecase,

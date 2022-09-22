@@ -1,10 +1,17 @@
 export class TokenModel {
-  public readonly access_token: string;
+  public readonly accessToken: string;
 
-  public readonly token_type: string;
+  public readonly tokenType: string;
 
   constructor(accessToken: string, tokenType: string) {
-    this.token_type = tokenType;
-    this.access_token = accessToken;
+    this.accessToken = tokenType;
+    this.tokenType = accessToken;
+  }
+
+  toJson(): Record<string, any> {
+    return {
+      access_token: this.accessToken,
+      token_type: this.tokenType,
+    };
   }
 }

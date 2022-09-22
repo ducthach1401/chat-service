@@ -40,6 +40,6 @@ export class SocketController {
     }
 
     const messages = await this.getMessagesUsecase.call(firstUser, secondUser);
-    res.status(HttpStatus.OK).json(messages);
+    res.status(HttpStatus.OK).json(messages.map((message) => message.toJson()));
   }
 }

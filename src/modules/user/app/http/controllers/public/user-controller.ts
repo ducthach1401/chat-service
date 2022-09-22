@@ -1,10 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { ErrorCode } from 'src/exceptions/error-code';
 import { LogicalException } from 'src/exceptions/logical-exception';
 import { Public } from 'src/modules/auth/app/decorators/metadata';
 import { GetUserByUsernameUsecase } from 'src/modules/user/domain/usecases/get-user-by-username-usecase';
 import { RegisterUserUsecase } from 'src/modules/user/domain/usecases/register-user-usecase';
-import { RegisterUserDto } from '../../dtos/register-user-dto';
+import { RegisterUserDto } from '../../dtos/user-dto';
 
 @Controller('api/v1/user')
 export class UserController {
@@ -15,7 +16,7 @@ export class UserController {
 
   @Public()
   @Post('register')
-  async register(@Body() body: RegisterUserDto): Promise<boolean> {
+  async register(@Body() body: RegisterUserDto, @Res() res: Response) {
     const user = await this.getUserByUsernameUsecase.call(body.username);
     if (user) {
       throw new LogicalException(
@@ -29,6 +30,6 @@ export class UserController {
       body.username,
       body.password,
     );
-    return true;
+    res.status(HttpStatus.OK).json(true);
   }
 }

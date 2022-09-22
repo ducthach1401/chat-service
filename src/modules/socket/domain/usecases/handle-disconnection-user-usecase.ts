@@ -11,7 +11,9 @@ export class HandleDisconnectionUserUsecase {
   ) {}
 
   async call(user: UserModel): Promise<void> {
-    await this.cacheManager.del(user.socketId);
+    if (user.socketId) {
+      await this.cacheManager.del(user.socketId);
+    }
     await this.updateUserUsecase.call(user, undefined, null);
   }
 }

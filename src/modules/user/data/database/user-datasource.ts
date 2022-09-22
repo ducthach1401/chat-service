@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Not, Repository } from 'typeorm';
 import { UserEntity } from './entities/user-entity';
 import { UserModel } from '../../domain/models/user-model';
 import * as brcypt from 'bcrypt';
+import { PaginationParams } from 'src/core/models/pagination-params';
+import { SortParams } from 'src/core/models/sort-params';
 
 @Injectable()
 export class UserDatasource {
@@ -74,5 +76,29 @@ export class UserDatasource {
     });
 
     return true;
+  }
+
+  async list(
+    user: UserModel,
+    paginationParams: PaginationParams,
+    sortParams: SortParams,
+    search: string | undefined,
+  ): Promise<UserModel[]> {
+    const options: FindOptionsWhere<UserEntity> = {};
+    options.id = Not(user.id);
+    if (search) {
+      options.name = Like(`%${search}%`);
+    }
+
+    const users = await this.userRepository.find({
+      where: options,
+      order: {
+        [sortParams.sort]: sortParams.dir,
+      },
+      skip: (paginationParams.page - 1) * paginationParams.limit,
+      take: paginationParams.limit,
+    });
+
+    return users.map((user) => user.toModel());
   }
 }

@@ -17,7 +17,7 @@ import { UpdateUserUsecase } from 'src/modules/user/domain/usecases/update-user-
 import {
   UpdatePasswordUserDto,
   UpdateUserDto,
-} from '../../dtos/register-user-dto';
+} from '../../dtos/user-dto';
 
 @Controller('api/user/v1/me')
 export class UserController {
@@ -41,7 +41,11 @@ export class UserController {
   }
 
   @Put('update')
-  async update(@Req() req: any, @Body() body: UpdateUserDto): Promise<boolean> {
+  async update(
+    @Req() req: any,
+    @Body() body: UpdateUserDto,
+    @Res() res: Response,
+  ) {
     const user = await this.getUserUsecase.call(req.user.user_id, undefined);
     if (!user) {
       throw new LogicalException(
@@ -52,14 +56,15 @@ export class UserController {
     }
 
     await this.updateUserUsecase.call(user, body.name, undefined);
-    return true;
+    res.status(HttpStatus.OK).json(true);
   }
 
   @Post('update/password')
   async password(
     @Req() req: any,
     @Body() body: UpdatePasswordUserDto,
-  ): Promise<boolean> {
+    @Res() res: Response,
+  ) {
     const user = await this.getUserUsecase.call(req.user.user_id, undefined);
     if (!user) {
       throw new LogicalException(
@@ -70,6 +75,6 @@ export class UserController {
     }
 
     await this.updateUserPasswordUsecase.call(user, body.password);
-    return true;
+    res.status(HttpStatus.OK).json(true);
   }
 }

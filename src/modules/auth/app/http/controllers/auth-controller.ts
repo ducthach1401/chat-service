@@ -28,7 +28,7 @@ export class AuthController {
   @Post('login')
   async login(@Body() body: LoginDto, @Res() res: Response) {
     const token = await this.loginUsecase.call(body.username, body.password);
-    res.status(HttpStatus.OK).json(token);
+    res.status(HttpStatus.OK).json(token.toJson());
   }
 
   @Delete('logout')

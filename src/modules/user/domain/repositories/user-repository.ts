@@ -1,3 +1,5 @@
+import { PaginationParams } from 'src/core/models/pagination-params';
+import { SortParams } from 'src/core/models/sort-params';
 import { UserModel } from '../models/user-model';
 
 export abstract class UserRepository {
@@ -16,4 +18,11 @@ export abstract class UserRepository {
   abstract checkPassword(user: UserModel, password: string): Promise<boolean>;
 
   abstract updatePassword(user: UserModel, password: string): Promise<boolean>;
+
+  abstract list(
+    user: UserModel,
+    paginationParams: PaginationParams,
+    sortParams: SortParams,
+    search: string | undefined,
+  ): Promise<UserModel[]>;
 }
