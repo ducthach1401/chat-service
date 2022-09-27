@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SortDir } from 'src/core/enums/sort-dir';
 import { UserModel } from 'src/modules/user/domain/models/user-model';
 import { Repository } from 'typeorm';
 import { MessageModel } from '../../domain/models/message-model';
@@ -28,12 +29,18 @@ export class SocketDatasource {
     receiveUser: UserModel,
   ): Promise<MessageModel[]> {
     const messages = await this.messageRepository.find({
-      where: {
-        send_user_id: sendUser.id,
-        receive_user_id: receiveUser.id,
-      },
+      where: [
+        {
+          send_user_id: sendUser.id,
+          receive_user_id: receiveUser.id,
+        },
+        {
+          send_user_id: receiveUser.id,
+          receive_user_id: sendUser.id,
+        },
+      ],
       order: {
-        created_at: 'DESC',
+        created_at: SortDir.Asc,
       },
       relations: ['send_user', 'receive_user'],
     });
