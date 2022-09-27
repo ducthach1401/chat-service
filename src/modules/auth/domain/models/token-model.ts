@@ -4,8 +4,8 @@ export class TokenModel {
   public readonly tokenType: string;
 
   constructor(accessToken: string, tokenType: string) {
-    this.accessToken = tokenType;
-    this.tokenType = accessToken;
+    this.accessToken = accessToken;
+    this.tokenType = tokenType;
   }
 
   toJson(): Record<string, any> {
