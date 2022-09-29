@@ -15,7 +15,6 @@ import { HandleConnectionUserUsecase } from '../../domain/usecases/handle-connec
 import { HandleDisconnectionUserUsecase } from '../../domain/usecases/handle-disconnection-user-usecase';
 import { SaveMessageUsecase } from '../../domain/usecases/messages/save-message-usecase';
 import { SendMessageDto } from '../dtos/socket-gateway-dto';
-import { GetPayloadByTokenUsecase } from 'src/modules/auth/domain/usecases/get-payload-by-token-usecase';
 import { LogicalException } from 'src/exceptions/logical-exception';
 import { ErrorCode } from 'src/exceptions/error-code';
 
@@ -30,34 +29,16 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly getUserByClientSocketUsecase: GetUserByClientSocketUsecase,
     private readonly saveMessageUsecase: SaveMessageUsecase,
     private readonly getUserUsecase: GetUserUsecase,
-    private readonly getPayloadByTokenUsecase: GetPayloadByTokenUsecase,
   ) {}
 
   @WebSocketServer() server: any;
 
   @SubscribeMessage('private')
-  async privateMessage(@MessageBody() data: SendMessageDto, @Req() req: any) {
-    const token = req.handshake.headers.authorization;
-    if (!token) {
-      throw new LogicalException(
-        ErrorCode.AUTH_LOGIN_FAILED,
-        'Login failed.',
-        undefined,
-      );
-    }
-    const payload = await this.getPayloadByTokenUsecase.call(
-      token.split(' ')[1],
-    );
-
-    const sendUser = await this.getUserUsecase.call(payload.user_id, undefined);
-    if (!sendUser) {
-      throw new LogicalException(
-        ErrorCode.USER_NOT_FOUND,
-        'User not found.',
-        undefined,
-      );
-    }
-
+  async privateMessage(
+    @MessageBody() data: SendMessageDto,
+    @ConnectedSocket() client: any,
+  ) {
+    const sendUser = await this.getUserByClientSocketUsecase.call(client);
     const receiveUser = await this.getUserUsecase.call(data.to, undefined);
     if (!receiveUser) {
       throw new LogicalException(
