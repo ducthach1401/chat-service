@@ -2,15 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SortDir } from 'src/core/enums/sort-dir';
 import { UserModel } from 'src/modules/user/domain/models/user-model';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { MessageModel } from '../../domain/models/message-model';
+import { SocketClientModel } from '../../domain/models/socket-client-model';
 import { MessageEntity } from './entities/message-entity';
+import { SocketClientsEntity } from './entities/socket-client-entity';
 
 @Injectable()
 export class SocketDatasource {
   constructor(
     @InjectRepository(MessageEntity)
     private readonly messageRepository: Repository<MessageEntity>,
+    @InjectRepository(SocketClientsEntity)
+    private readonly socketClientRepository: Repository<SocketClientsEntity>,
   ) {}
 
   async save(message: MessageModel): Promise<void> {
@@ -45,5 +49,38 @@ export class SocketDatasource {
       relations: ['send_user', 'receive_user'],
     });
     return messages.map((message) => message.toModel());
+  }
+
+  async saveSocket(socket: SocketClientModel): Promise<void> {
+    const entity = new SocketClientsEntity();
+    entity.id = socket.id;
+    entity.user_id = socket.userId;
+    entity.socket_id = socket.socketId;
+    entity.created_at = socket.createdAt;
+    entity.updated_at = socket.updatedAt;
+    await this.socketClientRepository.save(entity);
+  }
+
+  async listSocket(user: UserModel): Promise<SocketClientModel[]> {
+    const sockets = await this.socketClientRepository.find({
+      where: {
+        user_id: user.id,
+      },
+    });
+
+    return sockets.map((socket) => socket.toModel());
+  }
+
+  async deleteSocket(
+    user: UserModel,
+    socket: string | undefined,
+  ): Promise<void> {
+    const cond: FindOptionsWhere<SocketClientsEntity> = {
+      user_id: user.id,
+    };
+    if (socket) {
+      cond.socket_id = socket;
+    }
+    await this.socketClientRepository.delete(cond);
   }
 }

@@ -1,32 +1,30 @@
-export class UserModel {
+import { UserModel } from 'src/modules/user/domain/models/user-model';
+
+export class SocketClientModel {
   public readonly id: string;
-  public readonly name: string;
-  public readonly username: string;
-  public readonly password: string;
+  public readonly userId: string;
+  public readonly socketId: string;
   public readonly createdAt: Date;
   public readonly updatedAt: Date;
 
   constructor(
     id: string,
-    name: string,
-    username: string,
-    password: string,
+    userId: string,
+    socketId: string,
     createdAt: Date,
     updatedAt: Date,
   ) {
     this.id = id;
-    this.name = name;
-    this.username = username;
-    this.password = password;
+    this.userId = userId;
+    this.socketId = socketId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
-
   toJson(): Record<string, any> {
     return {
       id: this.id,
-      name: this.name,
-      username: this.username,
+      user_id: this.userId,
+      socket_id: this.socketId,
       created_at: this.createdAt,
       updated_at: this.updatedAt,
     };

@@ -18,6 +18,8 @@ import { SendMessageDto } from '../dtos/socket-gateway-dto';
 import { LogicalException } from 'src/exceptions/logical-exception';
 import { ErrorCode } from 'src/exceptions/error-code';
 import { Server, Socket } from 'socket.io';
+import { CreateSocketUsecase } from '../../domain/usecases/socket/create-socket-usecase';
+import { ListSocketUsecase } from '../../domain/usecases/socket/list-socket-usecase';
 
 @UseGuards(SocketGuard)
 @WebSocketGateway(parseInt(process.env.SOCKET_PORT), {
@@ -30,6 +32,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly getUserByClientSocketUsecase: GetUserByClientSocketUsecase,
     private readonly saveMessageUsecase: SaveMessageUsecase,
     private readonly getUserUsecase: GetUserUsecase,
+    private readonly listSocketUsecase: ListSocketUsecase,
   ) {}
 
   @WebSocketServer() server: Server;
@@ -48,8 +51,10 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         undefined,
       );
     }
-
-    this.server.to(receiveUser.socketId).emit('receive_message', data.content);
+    const sockets = await this.listSocketUsecase.call(receiveUser);
+    sockets.map((socket) => {
+      this.server.to(socket.socketId).emit('receive_message', data.content);
+    });
     await this.saveMessageUsecase.call(sendUser, receiveUser, data.content);
   }
 
@@ -60,6 +65,6 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleDisconnect(@ConnectedSocket() client: any) {
     const user = await this.getUserByClientSocketUsecase.call(client);
-    await this.handleDisconnectionUserUsecase.call(user);
+    await this.handleDisconnectionUserUsecase.call(user, client.id);
   }
 }

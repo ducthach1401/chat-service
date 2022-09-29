@@ -23,9 +23,6 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @Column()
-  socket_id: string | undefined;
-
   @CreateDateColumn()
   created_at: Date;
 
@@ -44,7 +41,6 @@ export class UserEntity {
       this.name,
       this.username,
       this.password,
-      this.socket_id,
       this.created_at,
       this.updated_at,
     );

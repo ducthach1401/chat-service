@@ -18,7 +18,6 @@ export class RegisterUserUsecase {
       name,
       username,
       brcypt.hashSync(password, 10),
-      undefined,
       new Date(),
       new Date(),
     );

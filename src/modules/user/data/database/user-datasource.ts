@@ -49,7 +49,6 @@ export class UserDatasource {
     entity.password = user.password;
     entity.created_at = user.createdAt;
     entity.updated_at = user.updatedAt;
-    entity.socket_id = user.socketId;
     await this.userRepository.save(entity);
     return true;
   }
