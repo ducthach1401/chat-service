@@ -11,24 +11,6 @@ export class GetUserUsecase {
   ) {}
 
   async call(id: string, relations: string[] | undefined): Promise<UserModel> {
-    const cacheUser = await this.cacheManager.get<UserModel>(id);
-    if (cacheUser) {
-      return new UserModel(
-        cacheUser.id,
-        cacheUser.name,
-        cacheUser.username,
-        cacheUser.password,
-        cacheUser.socketId,
-        cacheUser.createdAt,
-        cacheUser.updatedAt,
-      );
-    }
-
-    const user = await this.userRepository.get(id, relations);
-    if (user) {
-      await this.cacheManager.set(user.id, user);
-    }
-
-    return user;
+    return await this.userRepository.get(id, relations);
   }
 }

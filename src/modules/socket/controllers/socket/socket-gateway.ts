@@ -17,6 +17,7 @@ import { SaveMessageUsecase } from '../../domain/usecases/messages/save-message-
 import { SendMessageDto } from '../dtos/socket-gateway-dto';
 import { LogicalException } from 'src/exceptions/logical-exception';
 import { ErrorCode } from 'src/exceptions/error-code';
+import { Server, Socket } from 'socket.io';
 
 @UseGuards(SocketGuard)
 @WebSocketGateway(parseInt(process.env.SOCKET_PORT), {
@@ -31,7 +32,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly getUserUsecase: GetUserUsecase,
   ) {}
 
-  @WebSocketServer() server: any;
+  @WebSocketServer() server: Server;
 
   @SubscribeMessage('private')
   async privateMessage(
@@ -48,7 +49,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
       );
     }
 
-    this.server.emit(receiveUser.id, data.content);
+    this.server.to(receiveUser.socketId).emit('receive_message', data.content);
     await this.saveMessageUsecase.call(sendUser, receiveUser, data.content);
   }
 
