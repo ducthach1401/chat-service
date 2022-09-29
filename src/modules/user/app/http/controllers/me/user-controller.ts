@@ -14,10 +14,7 @@ import { LogicalException } from 'src/exceptions/logical-exception';
 import { GetUserUsecase } from 'src/modules/user/domain/usecases/get-user-usecase';
 import { UpdateUserPasswordUsecase } from 'src/modules/user/domain/usecases/update-user-password-usecase';
 import { UpdateUserUsecase } from 'src/modules/user/domain/usecases/update-user-usecase';
-import {
-  UpdatePasswordUserDto,
-  UpdateUserDto,
-} from '../../dtos/user-dto';
+import { UpdatePasswordUserDto, UpdateUserDto } from '../../dtos/user-dto';
 
 @Controller('api/user/v1/me')
 export class UserController {

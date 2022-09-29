@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, UseGuards } from '@nestjs/common';
+import { Req, UseGuards } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -14,8 +14,10 @@ import { GetUserByClientSocketUsecase } from '../../domain/usecases/get-user-by-
 import { HandleConnectionUserUsecase } from '../../domain/usecases/handle-connection-user-usecase';
 import { HandleDisconnectionUserUsecase } from '../../domain/usecases/handle-disconnection-user-usecase';
 import { SaveMessageUsecase } from '../../domain/usecases/messages/save-message-usecase';
-import { Cache } from 'cache-manager';
 import { SendMessageDto } from '../dtos/socket-gateway-dto';
+import { GetPayloadByTokenUsecase } from 'src/modules/auth/domain/usecases/get-payload-by-token-usecase';
+import { LogicalException } from 'src/exceptions/logical-exception';
+import { ErrorCode } from 'src/exceptions/error-code';
 
 @UseGuards(SocketGuard)
 @WebSocketGateway(parseInt(process.env.SOCKET_PORT), {
@@ -28,42 +30,54 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly getUserByClientSocketUsecase: GetUserByClientSocketUsecase,
     private readonly saveMessageUsecase: SaveMessageUsecase,
     private readonly getUserUsecase: GetUserUsecase,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    private readonly getPayloadByTokenUsecase: GetPayloadByTokenUsecase,
   ) {}
 
   @WebSocketServer() server: any;
 
   @SubscribeMessage('private')
-  async privateMessage(
-    @MessageBody() data: SendMessageDto,
-    @ConnectedSocket() client: any,
-  ) {
-    const sendUserId = await this.cacheManager.get<string>(client.id);
+  async privateMessage(@MessageBody() data: SendMessageDto, @Req() req: any) {
+    const token = req.handshake.headers.authorization;
+    if (!token) {
+      throw new LogicalException(
+        ErrorCode.AUTH_LOGIN_FAILED,
+        'Login failed.',
+        undefined,
+      );
+    }
+    const payload = await this.getPayloadByTokenUsecase.call(
+      token.split(' ')[1],
+    );
 
-    const sendUser = await this.getUserUsecase.call(sendUserId, undefined);
+    const sendUser = await this.getUserUsecase.call(payload.user_id, undefined);
+    if (!sendUser) {
+      throw new LogicalException(
+        ErrorCode.USER_NOT_FOUND,
+        'User not found.',
+        undefined,
+      );
+    }
 
     const receiveUser = await this.getUserUsecase.call(data.to, undefined);
     if (!receiveUser) {
-      return undefined;
+      throw new LogicalException(
+        ErrorCode.USER_NOT_FOUND,
+        'User not found.',
+        undefined,
+      );
     }
 
     this.server.emit(receiveUser.id, data.content);
     await this.saveMessageUsecase.call(sendUser, receiveUser, data.content);
   }
 
-  async handleConnection(client: any) {
+  async handleConnection(@ConnectedSocket() client: any) {
     const user = await this.getUserByClientSocketUsecase.call(client);
-    if (!user) {
-      return false;
-    }
     await this.handleConnectionUserUsecase.call(user, client.id);
   }
 
-  async handleDisconnect(client: any) {
+  async handleDisconnect(@ConnectedSocket() client: any) {
     const user = await this.getUserByClientSocketUsecase.call(client);
-    if (!user) {
-      return false;
-    }
     await this.handleDisconnectionUserUsecase.call(user);
   }
 }
