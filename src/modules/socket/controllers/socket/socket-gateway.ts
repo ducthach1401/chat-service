@@ -1,4 +1,4 @@
-import { Req, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -17,8 +17,7 @@ import { SaveMessageUsecase } from '../../domain/usecases/messages/save-message-
 import { SendMessageDto } from '../dtos/socket-gateway-dto';
 import { LogicalException } from 'src/exceptions/logical-exception';
 import { ErrorCode } from 'src/exceptions/error-code';
-import { Server, Socket } from 'socket.io';
-import { CreateSocketUsecase } from '../../domain/usecases/socket/create-socket-usecase';
+import { Server } from 'socket.io';
 import { ListSocketUsecase } from '../../domain/usecases/socket/list-socket-usecase';
 
 @UseGuards(SocketGuard)

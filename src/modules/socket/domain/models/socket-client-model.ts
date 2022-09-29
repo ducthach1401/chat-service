@@ -1,5 +1,3 @@
-import { UserModel } from 'src/modules/user/domain/models/user-model';
-
 export class SocketClientModel {
   public readonly id: string;
   public readonly userId: string;

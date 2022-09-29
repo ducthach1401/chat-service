@@ -1,4 +1,3 @@
-import { MessageModel } from 'src/modules/socket/domain/models/message-model';
 import { SocketClientModel } from 'src/modules/socket/domain/models/socket-client-model';
 import {
   Column,
