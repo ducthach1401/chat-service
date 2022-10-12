@@ -31,11 +31,11 @@ export class UserDatasource {
   async update(
     user: UserModel,
     name: string | undefined,
-    socketId: string | undefined,
+    isOnline: boolean | undefined,
   ): Promise<boolean> {
     await this.userRepository.update(user.id, {
       ...(name && { name: name }),
-      ...{ socket_id: socketId },
+      ...{ is_online: isOnline },
       updated_at: new Date(),
     });
     return true;

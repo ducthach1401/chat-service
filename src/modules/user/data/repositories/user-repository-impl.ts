@@ -22,9 +22,9 @@ export class UserRepositoryImpl extends UserRepository {
   async update(
     user: UserModel,
     name: string | undefined,
-    socketId: string | undefined,
+    isOnline: boolean | undefined,
   ): Promise<boolean> {
-    return await this.userDatasource.update(user, name, socketId);
+    return await this.userDatasource.update(user, name, isOnline);
   }
 
   async register(user: UserModel): Promise<boolean> {

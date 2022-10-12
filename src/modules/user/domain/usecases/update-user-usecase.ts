@@ -9,8 +9,8 @@ export class UpdateUserUsecase {
   async call(
     user: UserModel,
     name: string | undefined,
-    socketId: string | undefined,
+    isOnline: boolean | undefined,
   ): Promise<boolean> {
-    return await this.userRepository.update(user, name, socketId);
+    return await this.userRepository.update(user, name, isOnline);
   }
 }

@@ -10,7 +10,7 @@ export abstract class UserRepository {
   abstract update(
     user: UserModel,
     name: string | undefined,
-    socketId: string | undefined,
+    isOnline: boolean | undefined,
   ): Promise<boolean>;
 
   abstract register(user: UserModel): Promise<boolean>;

@@ -65,10 +65,18 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleConnection(@ConnectedSocket() client: any) {
     const user = await this.getUserByClientSocketUsecase.call(client);
     await this.handleConnectionUserUsecase.call(user, client.id);
+    this.server.emit('status', {
+      id: user.id,
+      is_online: true,
+    });
   }
 
   async handleDisconnect(@ConnectedSocket() client: any) {
     const user = await this.getUserByClientSocketUsecase.call(client);
     await this.handleDisconnectionUserUsecase.call(user, client.id);
+    this.server.emit('status', {
+      id: user.id,
+      is_online: false,
+    });
   }
 }

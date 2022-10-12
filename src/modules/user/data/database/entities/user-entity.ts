@@ -23,6 +23,9 @@ export class UserEntity {
   @Column()
   password: string;
 
+  @Column()
+  is_online: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 
@@ -41,6 +44,7 @@ export class UserEntity {
       this.name,
       this.username,
       this.password,
+      this.is_online,
       this.created_at,
       this.updated_at,
     );
