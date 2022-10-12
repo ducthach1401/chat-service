@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SortDir } from 'src/core/enums/sort-dir';
+import { PaginationParams } from 'src/core/models/pagination-params';
+import { SortParams } from 'src/core/models/sort-params';
 import { UserModel } from 'src/modules/user/domain/models/user-model';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { MessageModel } from '../../domain/models/message-model';
@@ -31,6 +33,9 @@ export class SocketDatasource {
   async list(
     sendUser: UserModel,
     receiveUser: UserModel,
+    paginationParams: PaginationParams,
+    sortParams: SortParams,
+    search: string | undefined,
   ): Promise<MessageModel[]> {
     const messages = await this.messageRepository.find({
       where: [
@@ -44,11 +49,13 @@ export class SocketDatasource {
         },
       ],
       order: {
-        created_at: SortDir.Asc,
+        [sortParams.sort]: sortParams.dir,
       },
+      skip: (paginationParams.page - 1) * paginationParams.limit,
+      take: paginationParams.limit,
       relations: ['send_user', 'receive_user'],
     });
-    return messages.map((message) => message.toModel());
+    return messages.map((message) => message.toModel()).reverse();
   }
 
   async saveSocket(socket: SocketClientModel): Promise<void> {

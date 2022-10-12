@@ -42,7 +42,7 @@ export class UpdatePasswordUserDto {
   password: string;
 }
 
-export class UserListParams {
+export class UserListQuery {
   @IsOptional()
   @IsNumber()
   @Type(() => Number)

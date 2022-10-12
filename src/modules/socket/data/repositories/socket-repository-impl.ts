@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { PaginationParams } from 'src/core/models/pagination-params';
+import { SortParams } from 'src/core/models/sort-params';
 import { UserModel } from 'src/modules/user/domain/models/user-model';
 import { MessageModel } from '../../domain/models/message-model';
 import { SocketClientModel } from '../../domain/models/socket-client-model';
@@ -18,8 +20,17 @@ export class SocketRepositoryImpl extends SocketRepository {
   async getMessages(
     sendUser: UserModel,
     receiveUser: UserModel,
+    paginationParams: PaginationParams,
+    sortParams: SortParams,
+    search: string | undefined,
   ): Promise<MessageModel[]> {
-    return await this.socketDatasource.list(sendUser, receiveUser);
+    return await this.socketDatasource.list(
+      sendUser,
+      receiveUser,
+      paginationParams,
+      sortParams,
+      search,
+    );
   }
 
   async saveSocket(socket: SocketClientModel): Promise<void> {

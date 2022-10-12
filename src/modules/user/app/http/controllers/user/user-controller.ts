@@ -6,7 +6,7 @@ import { ErrorCode } from 'src/exceptions/error-code';
 import { LogicalException } from 'src/exceptions/logical-exception';
 import { GetUserUsecase } from 'src/modules/user/domain/usecases/get-user-usecase';
 import { GetUsersUsecase } from 'src/modules/user/domain/usecases/get-users-usecase';
-import { UserListParams } from '../../dtos/user-dto';
+import { UserListQuery } from '../../dtos/user-dto';
 
 @Controller('api/user/v1/users')
 export class UserController {
@@ -18,7 +18,7 @@ export class UserController {
   @Get()
   async list(
     @Req() req: any,
-    @Query() query: UserListParams,
+    @Query() query: UserListQuery,
     @Res() res: Response,
   ) {
     const user = await this.getUserUsecase.call(req.user.user_id, undefined);
