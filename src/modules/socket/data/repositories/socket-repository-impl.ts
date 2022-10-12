@@ -37,8 +37,11 @@ export class SocketRepositoryImpl extends SocketRepository {
     await this.socketDatasource.saveSocket(socket);
   }
 
-  async listSocket(user: UserModel): Promise<SocketClientModel[]> {
-    return await this.socketDatasource.listSocket(user);
+  async listSocket(
+    sendUser: UserModel,
+    receiveUser: UserModel,
+  ): Promise<SocketClientModel[]> {
+    return await this.socketDatasource.listSocket(sendUser, receiveUser);
   }
 
   async deleteSocket(

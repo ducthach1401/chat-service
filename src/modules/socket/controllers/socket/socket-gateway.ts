@@ -50,9 +50,12 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         undefined,
       );
     }
-    const sockets = await this.listSocketUsecase.call(receiveUser);
+    const sockets = await this.listSocketUsecase.call(sendUser, receiveUser);
     sockets.map((socket) => {
-      this.server.to(socket.socketId).emit('receive_message', data.content);
+      this.server.to(socket.socketId).emit('receive_message', {
+        is_me: socket.userId == sendUser.id,
+        data: data.content,
+      });
     });
     await this.saveMessageUsecase.call(sendUser, receiveUser, data.content);
   }

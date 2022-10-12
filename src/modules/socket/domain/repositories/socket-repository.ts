@@ -17,8 +17,11 @@ export abstract class SocketRepository {
 
   abstract saveSocket(socket: SocketClientModel): Promise<void>;
 
-  abstract listSocket(user: UserModel): Promise<SocketClientModel[]>;
-  
+  abstract listSocket(
+    sendUser: UserModel,
+    receiveUser: UserModel,
+  ): Promise<SocketClientModel[]>;
+
   abstract deleteSocket(
     user: UserModel,
     socket: string | undefined,

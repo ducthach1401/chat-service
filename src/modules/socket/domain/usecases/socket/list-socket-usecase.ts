@@ -7,7 +7,10 @@ import { SocketRepository } from '../../repositories/socket-repository';
 export class ListSocketUsecase {
   constructor(private readonly socketRepository: SocketRepository) {}
 
-  async call(user: UserModel): Promise<SocketClientModel[]> {
-    return await this.socketRepository.listSocket(user);
+  async call(
+    sendUser: UserModel,
+    receiveUser: UserModel,
+  ): Promise<SocketClientModel[]> {
+    return await this.socketRepository.listSocket(sendUser, receiveUser);
   }
 }
