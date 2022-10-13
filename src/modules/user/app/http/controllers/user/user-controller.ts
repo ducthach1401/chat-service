@@ -1,4 +1,12 @@
-import { Controller, Get, HttpStatus, Query, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { PaginationParams } from 'src/core/models/pagination-params';
 import { SortParams } from 'src/core/models/sort-params';
@@ -6,7 +14,7 @@ import { ErrorCode } from 'src/exceptions/error-code';
 import { LogicalException } from 'src/exceptions/logical-exception';
 import { GetUserUsecase } from 'src/modules/user/domain/usecases/get-user-usecase';
 import { GetUsersUsecase } from 'src/modules/user/domain/usecases/get-users-usecase';
-import { UserListQuery } from '../../dtos/user-dto';
+import { UserIdParam, UserListQuery } from '../../dtos/user-dto';
 
 @Controller('api/user/v1/users')
 export class UserController {
@@ -36,5 +44,23 @@ export class UserController {
       query.search,
     );
     res.status(HttpStatus.OK).json(users.map((user) => user.toJson()));
+  }
+
+  @Get('id/:id')
+  async get(
+    @Req() req: any,
+    @Param() param: UserIdParam,
+    @Res() res: Response,
+  ) {
+    const user = await this.getUserUsecase.call(req.user.user_id, undefined);
+    if (!user) {
+      throw new LogicalException(
+        ErrorCode.USER_NOT_FOUND,
+        'User not found.',
+        undefined,
+      );
+    }
+    const getUser = await this.getUserUsecase.call(param.id, undefined);
+    res.status(HttpStatus.OK).json(getUser.toJson());
   }
 }

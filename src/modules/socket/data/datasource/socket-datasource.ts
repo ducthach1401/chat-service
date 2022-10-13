@@ -56,7 +56,7 @@ export class SocketDatasource {
       take: paginationParams.limit,
       relations: ['send_user', 'receive_user'],
     });
-    return messages.map((message) => message.toModel()).reverse();
+    return messages.map((message) => message.toModel());
   }
 
   async saveSocket(socket: SocketClientModel): Promise<void> {

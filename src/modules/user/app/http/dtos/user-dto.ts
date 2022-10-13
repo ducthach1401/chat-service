@@ -67,3 +67,8 @@ export class UserListQuery {
   @IsString()
   search: string;
 }
+
+export class UserIdParam {
+  @IsString()
+  id: string;
+}
