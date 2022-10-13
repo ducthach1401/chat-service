@@ -11,11 +11,7 @@ export class GetPayloadByTokenUsecase {
     try {
       return await this.jwtService.verifyAsync(token);
     } catch (error) {
-      throw new LogicalException(
-        ErrorCode.TOKEN_FAILED,
-        'Token failed.',
-        undefined,
-      );
+      new LogicalException(ErrorCode.TOKEN_FAILED, 'Token failed.', undefined);
     }
   }
 }
